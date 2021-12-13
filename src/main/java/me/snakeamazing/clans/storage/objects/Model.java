@@ -1,11 +1,11 @@
 package me.snakeamazing.clans.storage.objects;
 
+import org.bson.types.ObjectId;
+
 public interface Model {
 
-    String getId();
+    ObjectId getId();
 
-    default String getCacheIdentifier() {
-        return getId();
-    }
+    void setId(ObjectId id);
 
 }

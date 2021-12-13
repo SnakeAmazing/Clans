@@ -5,14 +5,16 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.IndexOptions;
 import dev.morphia.annotations.Indexed;
 import me.snakeamazing.clans.storage.objects.Model;
+import org.bson.types.ObjectId;
 
+import java.util.Collections;
 import java.util.Set;
 
-@Entity(value = "Clans")
+@Entity(value = "clan")
 public class Clan implements Model {
 
     @Id
-    private String id;
+    private ObjectId id;
 
     @Indexed(options = @IndexOptions(unique = true))
     private String name;
@@ -27,15 +29,22 @@ public class Clan implements Model {
     private Set<String> members;
     private char color;
 
-    public Clan() {
+    public Clan(String name, String prefix, String leader) {
+        this.id = new ObjectId();
+        this.name = name;
+        this.prefix = prefix;
+        this.leader = leader;
 
+        this.level = 1;
+        this.members = Collections.emptySet();
+        this.color = '7';
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String clanUUID) {
+    public void setId(ObjectId clanUUID) {
         this.id = clanUUID;
     }
 
