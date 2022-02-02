@@ -15,14 +15,14 @@ public class FileMatcher {
         setup();
     }
 
-    private final Map<String, FileCreator> files = new HashMap<>();
+    private final Map<String, YAMLFile> files = new HashMap<>();
 
     public void setup() {
-        files.put("config", new FileCreator(plugin, "config"));
-        files.put("clans", new FileCreator(plugin, "clans"));
+        files.put("config", new YAMLFile(plugin, "config"));
+        files.put("clans", new YAMLFile(plugin, "clans"));
     }
 
-    public FileCreator getFile(String key) {
+    public YAMLFile getFile(String key) {
         return files.get(key);
     }
 }

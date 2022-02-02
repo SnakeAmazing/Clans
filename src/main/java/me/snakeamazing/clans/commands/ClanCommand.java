@@ -3,6 +3,7 @@ package me.snakeamazing.clans.commands;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import me.snakeamazing.clans.clan.ClanHandler;
 import me.snakeamazing.clans.clan.ClanManager;
 import org.bukkit.entity.Player;
 
@@ -10,9 +11,11 @@ import org.bukkit.entity.Player;
 public class ClanCommand implements CommandClass {
 
     private final ClanManager clanManager;
+    private final ClanHandler clanHandler;
 
-    public ClanCommand(ClanManager clanManager) {
+    public ClanCommand(ClanManager clanManager, ClanHandler clanHandler) {
         this.clanManager = clanManager;
+        this.clanHandler = clanHandler;
     }
 
     @Command(names = "")
@@ -23,11 +26,13 @@ public class ClanCommand implements CommandClass {
 
     @Command(names = "create")
     public boolean createClanCommand(@Sender Player player, String name, String prefix) {
-
         clanManager.createClan(name, prefix, player);
 
         return false;
     }
 
+    @Command(names = "invite")
+    public void onInviteCommand(@Sender Player player, Player target) {
 
+    }
 }

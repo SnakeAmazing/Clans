@@ -1,46 +1,60 @@
 package me.snakeamazing.clans.clan;
 
-import me.snakeamazing.clans.file.FileCreator;
+import me.snakeamazing.clans.file.YAMLFile;
 import me.snakeamazing.clans.file.FileMatcher;
-import me.snakeamazing.clans.storage.repository.ObjectRepository;
-import me.snakeamazing.clans.storage.repository.RepositoryMatcher;
+import me.snakeamazing.clans.rank.ClanRank;
+import me.snakeamazing.clans.service.ClanService;
+import me.snakeamazing.clans.user.ClanUser;
+import me.snakeamazing.clans.user.DefaultClanUser;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
 public class ClanManager {
 
-    private final FileCreator config;
-    private final ObjectRepository<Clan> clanObjectRepository;
+    private final YAMLFile config;
 
-    public ClanManager(FileMatcher matcher, RepositoryMatcher repositoryMatcher) {
+    private final ClanService clanService;
+
+    public ClanManager(ClanService clanService, FileMatcher matcher) {
         this.config = matcher.getFile("config");
 
-        clanObjectRepository = (ObjectRepository<Clan>) repositoryMatcher.get(Clan.class);
-
+        this.clanService = clanService;
     }
 
     public void createClan(String name, String prefix, Player leader) {
 
-        if (clanObjectRepository.findOneByValue("name", name).isPresent()) {
+        if (clanService.checkIfClanExists(name)) {
             leader.sendMessage("Clan already exists.");
             return;
         }
 
-        Clan clan = new Clan(name, prefix, leader.getName());
+        Clan clan = new DefaultClan(name, prefix, leader.getName());
+        clanService.save(clan, true);
+
+        ClanUser clanUser = new DefaultClanUser(leader.getName(), leader.getUniqueId().toString(),
+                clan.getName(), ClanRank.LEADER);
+        //TODO USER SERVICE
 
         leader.sendMessage("Clan created correctly");
-
-        clanObjectRepository.save(clan);
     }
 
-    public Clan findClanByLeader(String leader) {
-        Optional<Clan> clan = clanObjectRepository.findOneByValue("leader", leader);
-
-        return clan.orElse(null);
-
+    public void addPlayerToClan(Player player, String clanName) {
+        clanService
+                .find(clanName)
+                .ifPresent(clan -> {
+                    clan.getMembers().add(player.getName());
+                    //TODO USER SERVICE
+                    ClanUser clanUser = new DefaultClanUser(player.getName(), player.getUniqueId().toString(),
+                            clanName, ClanRank.USER);
+                });
     }
 
+    public Clan getClanByPlayer(String playerName) {
+        Optional<Clan> optionalClan = clanService.findByPlayer(playerName);
+
+        return optionalClan.orElse(null);
+    }
 
 
 }

@@ -1,110 +1,50 @@
 package me.snakeamazing.clans.clan;
 
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
-import dev.morphia.annotations.IndexOptions;
-import dev.morphia.annotations.Indexed;
-import me.snakeamazing.clans.storage.objects.Model;
-import org.bson.types.ObjectId;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import me.snakeamazing.clans.storage.model.Model;
 
-import java.util.Collections;
 import java.util.Set;
 
-@Entity(value = "clan")
-public class Clan implements Model {
+@JsonDeserialize(as = DefaultClan.class)
+public interface Clan extends Model {
 
-    @Id
-    private ObjectId id;
+    String getName();
 
-    @Indexed(options = @IndexOptions(unique = true))
-    private String name;
+    void setName(String name);
 
-    @Indexed(options = @IndexOptions(unique = true))
-    private String prefix;
+    String getPrefix();
 
-    @Indexed(options = @IndexOptions(unique = true))
-    private String leader;
+    void setPrefix(String prefix);
 
-    private int level;
-    private Set<String> members;
-    private char color;
+    String getLeader();
 
-    public Clan(String name, String prefix, String leader) {
-        this.id = new ObjectId();
-        this.name = name;
-        this.prefix = prefix;
-        this.leader = leader;
+    void setLeader(String leader);
 
-        this.level = 1;
-        this.members = Collections.emptySet();
-        this.color = '7';
-    }
+    int getLevel();
 
-    public ObjectId getId() {
-        return id;
-    }
+    void setLevel(int level);
 
-    public void setId(ObjectId clanUUID) {
-        this.id = clanUUID;
-    }
+    void incrementLevel();
 
-    public String getName() {
-        return name;
-    }
+    int getKills();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    void setKills(int kills);
 
-    public String getPrefix() {
-        return prefix;
-    }
+    void incrementKills();
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+    int getDeaths();
 
-    public String getLeader() {
-        return leader;
-    }
+    void setDeaths(int deaths);
 
-    public void setLeader(String leader) {
-        this.leader = leader;
-    }
+    void incrementDeaths();
 
-    public int getLevel() {
-        return level;
-    }
+    Set<String> getMembers();
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+    Set<String> getAllys();
 
-    public void incrementLevel() {
-        ++this.level;
-    }
+    Set<String> getEnemies();
 
-    public Set<String> getMembers() {
-        return members;
-    }
+    char getColor();
 
-    public void setMembers(Set<String> members) {
-        this.members = members;
-    }
-
-    public void addMember(String newMember) {
-        this.members.add(newMember);
-    }
-
-    public void removeMember(String member) {
-        this.members.remove(member);
-    }
-
-    public char getColor() {
-        return color;
-    }
-
-    public void setColor(char color) {
-        this.color = color;
-    }
+    void setColor(char color);
 }

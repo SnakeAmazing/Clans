@@ -10,25 +10,25 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class FileCreator extends YamlConfiguration {
+public class YAMLFile extends YamlConfiguration {
     private final String fileName;
 
     private final Plugin plugin;
 
     private final File file;
 
-    public FileCreator(Plugin plugin, String filename, String fileExtension, File folder) {
+    public YAMLFile(Plugin plugin, String filename, String fileExtension, File folder) {
         this.plugin = plugin;
         this.fileName = filename + (filename.endsWith(fileExtension) ? "" : fileExtension);
         this.file = new File(folder, this.fileName);
         createFile();
     }
 
-    public FileCreator(Plugin plugin, String fileName) {
+    public YAMLFile(Plugin plugin, String fileName) {
         this(plugin, fileName, ".yml");
     }
 
-    public FileCreator(Plugin plugin, String fileName, String fileExtension) {
+    public YAMLFile(Plugin plugin, String fileName, String fileExtension) {
         this(plugin, fileName, fileExtension, plugin.getDataFolder());
     }
 

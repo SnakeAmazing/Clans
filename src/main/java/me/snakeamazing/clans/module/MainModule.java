@@ -12,39 +12,43 @@ import me.snakeamazing.clans.Clans;
 import me.snakeamazing.clans.clan.ClanManager;
 import me.snakeamazing.clans.commands.ClanCommand;
 import me.snakeamazing.clans.file.FileMatcher;
-import me.snakeamazing.clans.storage.repository.RepositoryMatcher;
 
 public class MainModule implements Module {
 
     private final Clans clans;
 
     private StorageModule storageModule;
-
-    private RepositoryMatcher repositoryMatcher;
-
-    private ClanManager clanManager;
+    private CacheModule cacheModule;
+    private ServiceModule serviceModule;
+    private ManagerModule managerModule;
 
     public MainModule(Clans clans) {
         this.clans = clans;
     }
 
-    public void load() {
+    public void start() {
         FileMatcher fileMatcher = new FileMatcher(clans);
 
-        storageModule = new StorageModule();
-        storageModule.load();
+        storageModule = new StorageModule(fileMatcher);
+        storageModule.start();
+
+        cacheModule = new CacheModule(storageModule.getClanStorage(), storageModule.getClanUserStorage());
+        cacheModule.start();
 
         System.out.println("Connected to mongodb");
 
-        repositoryMatcher = storageModule.getRepositoryMatcher();
+        serviceModule = new ServiceModule(cacheModule, storageModule);
+        serviceModule.start();
 
-        clanManager = new ClanManager(fileMatcher, repositoryMatcher);
+        managerModule = new ManagerModule(serviceModule, fileMatcher);
+        managerModule.start();
 
         registerCommands();
     }
 
-    public void unLoad() {
-
+    public void stop() {
+        storageModule.stop();
+        cacheModule.stop();
     }
 
     private void registerCommands() {
@@ -55,6 +59,6 @@ public class MainModule implements Module {
         AnnotatedCommandTreeBuilder treeBuilder = new AnnotatedCommandTreeBuilderImpl(partInjector);
         CommandManager commandManager = new BukkitCommandManager(clans.getName());
 
-        commandManager.registerCommands(treeBuilder.fromClass(new ClanCommand(clanManager)));
+        commandManager.registerCommands(treeBuilder.fromClass(new ClanCommand(managerModule.getClanManager())));
     }
 }

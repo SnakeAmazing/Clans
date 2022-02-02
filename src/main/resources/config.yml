@@ -1,0 +1,8 @@
+database:
+  uri:
+  database-name:
+
+chat:
+    no-clan-prefix: "&cSin Clan"
+    prefix-format: "&7[&%color%%prefix%&7]"
+    ally-chat-format: "&7[&5&lALLY&7] &7%player_name% &7> &f%message%"
