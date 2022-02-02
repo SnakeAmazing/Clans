@@ -33,6 +33,16 @@ public class ClanCommand implements CommandClass {
 
     @Command(names = "invite")
     public void onInviteCommand(@Sender Player player, Player target) {
+        clanHandler.invitePlayerToClan(player, target);
+    }
 
+    @Command(names = {"refuse", "deny"})
+    public void onRefuseCommand(@Sender Player player) {
+        clanHandler.removePendingPlayer(player);
+    }
+
+    @Command(names = "accept")
+    public void onClanAcceptCommand(@Sender Player player) {
+        clanHandler.addPlayerToClan(player);
     }
 }

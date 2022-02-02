@@ -1,0 +1,9 @@
+messages:
+  clan:
+    commands:
+      invite:
+        no-clan: "&cPlayer doesn't have clan."
+        target-has-clan: "&cThe invited player already has a clan."
+        no-pending-invite: "&cYou don't have a pending clan invite."
+        successful: "&aThe player %player% has been invited."
+        refuse: "&aYou have refused the clan invite from clan %clan%."

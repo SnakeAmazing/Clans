@@ -59,6 +59,7 @@ public class MainModule implements Module {
         AnnotatedCommandTreeBuilder treeBuilder = new AnnotatedCommandTreeBuilderImpl(partInjector);
         CommandManager commandManager = new BukkitCommandManager(clans.getName());
 
-        commandManager.registerCommands(treeBuilder.fromClass(new ClanCommand(managerModule.getClanManager())));
+        commandManager.registerCommands(treeBuilder.fromClass(new ClanCommand(managerModule.getClanManager(),
+                managerModule.getClanHandler())));
     }
 }

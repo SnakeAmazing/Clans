@@ -1,0 +1,5 @@
+main: me.snakeamazing.clans.Clans
+name: Clans
+version: 0.0.1
+author: SnakeAmazing
+api-version: 1.13
