@@ -1,10 +1,7 @@
 package me.snakeamazing.clans.module;
 
-import me.snakeamazing.clans.cache.Cache;
-import me.snakeamazing.clans.clan.Clan;
 import me.snakeamazing.clans.service.ClanService;
-import me.snakeamazing.clans.storage.MongoStorage;
-import me.snakeamazing.clans.user.ClanUser;
+import me.snakeamazing.clans.service.UserService;
 
 public class ServiceModule implements Module {
 
@@ -12,6 +9,7 @@ public class ServiceModule implements Module {
     private final StorageModule storageModule;
 
     private ClanService clanService;
+    private UserService userService;
 
     public ServiceModule(CacheModule cacheModule, StorageModule storageModule) {
         this.cacheModule = cacheModule;
@@ -22,6 +20,8 @@ public class ServiceModule implements Module {
     public void start() {
         clanService = new ClanService(cacheModule.getClanCache(), storageModule.getClanStorage(),
                 cacheModule.getUserCache());
+
+        userService = new UserService(cacheModule.getUserCache(), storageModule.getClanUserStorage());
     }
 
     @Override
@@ -31,5 +31,9 @@ public class ServiceModule implements Module {
 
     public ClanService getClanService() {
         return clanService;
+    }
+
+    public UserService getUserService() {
+        return userService;
     }
 }

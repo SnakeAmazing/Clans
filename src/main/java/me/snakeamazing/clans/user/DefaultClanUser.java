@@ -39,7 +39,7 @@ public class DefaultClanUser implements ClanUser {
 
     @Override
     public String getId() {
-        return name;
+        return uuid;
     }
 
     @Override

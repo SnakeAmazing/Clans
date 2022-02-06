@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import me.snakeamazing.clans.storage.model.Model;
 
 import java.util.Set;
+import java.util.UUID;
 
 @JsonDeserialize(as = DefaultClan.class)
 public interface Clan extends Model {
@@ -16,9 +17,9 @@ public interface Clan extends Model {
 
     void setPrefix(String prefix);
 
-    String getLeader();
+    UUID getLeader();
 
-    void setLeader(String leader);
+    void setLeader(UUID leader);
 
     int getLevel();
 
@@ -38,11 +39,23 @@ public interface Clan extends Model {
 
     void incrementDeaths();
 
-    Set<String> getMembers();
+    Set<UUID> getAllMembers();
+
+    void addMember(UUID uuid);
+
+    void removeMember(UUID uuid);
+
+    Set<UUID> getMembers();
+
+    void setMembers(Set<UUID> members);
 
     Set<String> getAllys();
 
+    void setAllys(Set<String> allys);
+
     Set<String> getEnemies();
+
+    void setEnemies(Set<String> enemies);
 
     char getColor();
 

@@ -2,6 +2,7 @@ package me.snakeamazing.clans.commands;
 
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
+import me.fixeddev.commandflow.annotated.annotation.Text;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import me.snakeamazing.clans.clan.ClanHandler;
 import me.snakeamazing.clans.clan.ClanManager;
@@ -19,16 +20,18 @@ public class ClanCommand implements CommandClass {
     }
 
     @Command(names = "")
-    public boolean onClanCommand(@Sender Player player) {
+    public void onClanCommand(@Sender Player player) {
         player.sendMessage("Help");
-        return false;
     }
 
     @Command(names = "create")
-    public boolean createClanCommand(@Sender Player player, String name, String prefix) {
+    public void createClanCommand(@Sender Player player, String name, String prefix) {
         clanManager.createClan(name, prefix, player);
+    }
 
-        return false;
+    @Command(names = "disband")
+    public void onDisbandCommand(@Sender Player player) {
+        clanManager.disbandClan(player);
     }
 
     @Command(names = "invite")
@@ -44,5 +47,10 @@ public class ClanCommand implements CommandClass {
     @Command(names = "accept")
     public void onClanAcceptCommand(@Sender Player player) {
         clanHandler.addPlayerToClan(player);
+    }
+
+    @Command(names = "chat")
+    public void onChatCommand(@Sender Player player, @Text String message) {
+        clanHandler.sendMessageToMembers(player, message);
     }
 }

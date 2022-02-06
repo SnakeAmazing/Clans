@@ -5,10 +5,13 @@ import me.snakeamazing.clans.file.YAMLFile;
 import me.snakeamazing.clans.request.ClanInviteRequest;
 import me.snakeamazing.clans.request.Request;
 import me.snakeamazing.clans.request.RequestManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ClanHandler {
 
@@ -74,5 +77,21 @@ public class ClanHandler {
     public void removePendingPlayer(Player player) {
         player.sendMessage(messages.getString("messages.clan.commands.invite.refuse")
                 .replace("%clan%", pendingUsers.remove(player.getUniqueId().toString())));
+    }
+
+    public void sendMessageToMembers(Player player, String message) {
+        Clan clan = clanManager.getClanByPlayer(player.getName());
+
+        if (clan == null) {
+            player.sendMessage(messages.getString("messages.clan.commands.invite.no-clan"));
+            return;
+        }
+
+        for (UUID uuid : clan.getAllMembers()) {
+            Player member = Bukkit.getPlayer(uuid);
+            if (member != null) {
+                member.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            }
+        }
     }
 }

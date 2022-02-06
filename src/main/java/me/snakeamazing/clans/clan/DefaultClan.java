@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.beans.ConstructorProperties;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class DefaultClan implements Clan {
 
@@ -13,19 +14,19 @@ public class DefaultClan implements Clan {
 
     private String prefix;
 
-    private String leader;
+    private UUID leader;
 
     private int level;
     private int kills;
     private int deaths;
 
-    private Set<String> members;
+    private Set<UUID> members;
     private Set<String> allys;
     private Set<String> enemies;
 
     private char color;
 
-    public DefaultClan(String name, String prefix, String leader) {
+    public DefaultClan(String name, String prefix, UUID leader) {
         this.name = name;
         this.prefix = prefix;
         this.leader = leader;
@@ -42,8 +43,8 @@ public class DefaultClan implements Clan {
     @ConstructorProperties({
             "name", "prefix", "leader", "level", "kills", "deaths", "members", "allys", "enemies", "color"
     })
-    public DefaultClan(String name, String prefix, String leader, int level, int kills, int deaths,
-                       Set<String> members, Set<String> allys, Set<String> enemies, char color) {
+    public DefaultClan(String name, String prefix, UUID leader, int level, int kills, int deaths,
+                       Set<UUID> members, Set<String> allys, Set<String> enemies, char color) {
         this.name = name;
         this.prefix = prefix;
         this.leader = leader;
@@ -56,38 +57,47 @@ public class DefaultClan implements Clan {
         this.color = color;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getPrefix() {
         return prefix;
     }
 
+    @Override
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    public String getLeader() {
+    @Override
+    public UUID getLeader() {
         return leader;
     }
 
-    public void setLeader(String leader) {
+    @Override
+    public void setLeader(UUID leader) {
         this.leader = leader;
     }
 
+    @Override
     public int getLevel() {
         return level;
     }
 
+    @Override
     public void setLevel(int level) {
         this.level = level;
     }
 
+    @Override
     public void incrementLevel() {
         ++this.level;
     }
@@ -122,8 +132,31 @@ public class DefaultClan implements Clan {
         ++this.deaths;
     }
 
-    public Set<String> getMembers() {
+    @Override
+    public Set<UUID> getAllMembers() {
+        Set<UUID> all = members;
+        all.add(leader);
+
+        return all;
+    }
+
+    @Override
+    public void addMember(UUID uuid) {
+        this.members.add(uuid);
+    }
+
+    @Override
+    public void removeMember(UUID uuid) {
+        this.members.remove(uuid);
+    }
+
+    public Set<UUID> getMembers() {
         return members;
+    }
+
+    @Override
+    public void setMembers(Set<UUID> members) {
+        this.members = members;
     }
 
     @Override
@@ -132,8 +165,18 @@ public class DefaultClan implements Clan {
     }
 
     @Override
+    public void setAllys(Set<String> allys) {
+        this.allys = allys;
+    }
+
+    @Override
     public Set<String> getEnemies() {
         return enemies;
+    }
+
+    @Override
+    public void setEnemies(Set<String> enemies) {
+        this.enemies = enemies;
     }
 
     public char getColor() {
@@ -146,6 +189,6 @@ public class DefaultClan implements Clan {
 
     @Override
     public String getId() {
-        return null;
+        return prefix;
     }
 }

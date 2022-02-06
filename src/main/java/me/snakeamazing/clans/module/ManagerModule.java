@@ -23,7 +23,7 @@ public class ManagerModule implements Module {
 
     @Override
     public void start() {
-        clanManager = new ClanManager(serviceModule.getClanService(), fileMatcher);
+        clanManager = new ClanManager(serviceModule.getClanService(), serviceModule.getUserService(), fileMatcher);
         requestManager = new RequestManager();
 
         clanHandler = new ClanHandler(clanManager, requestManager, fileMatcher);
